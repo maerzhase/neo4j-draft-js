@@ -12,6 +12,11 @@
   NEO4J_PASSWORD=
   ```
 
+# Usage
+
+## Initialize Database Constraints
+`npm run init` will call `initConstraints()` functions of the models.
+
 ## Development
 
 `npm start` will start the server in dev mode with `nodemon` watching changes

@@ -4,7 +4,7 @@ import { runSession } from '../neo4j/dbUtils';
 class Node {
 
   static fromResult(result) {
-    return new this(result.records[0].get('n'));
+    return new this(result.records[0].get('n').properties);
   }
 
   static initConstraints(session) {
@@ -55,11 +55,12 @@ class Node {
 
   static createRelationFromTo(session, labelA, labelB, keyA, keyB, a, b, relation) {
     const CYPHER = `
-      MATCH (a:${labelA}),(b:${labelB})
-      WHERE a.${keyA} = '${a}' AND b.${keyB} = '${b}'
-      CREATE (a)-[r:${relation}]->(b)
-      RETURN r`;
+      MATCH (n:${labelA}),(b:${labelB})
+      WHERE n.${keyA} = '${a}' AND b.${keyB} = '${b}'
+      CREATE (n)-[r:${relation}]->(b)
+      RETURN n`;
     return runSession(session, CYPHER, {}).then((result) => {
+      if (result.records.length > 0) return Node.fromResult(result);
       return result;
     });
   }

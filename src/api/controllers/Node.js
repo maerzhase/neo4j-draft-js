@@ -21,7 +21,9 @@ class Node {
 
   static create(session, props) {
     const propsString = objectToCypher(props);
-    const CYPHER = `CREATE (n:${this.label} {${propsString}}) RETURN n`;
+    const CYPHER = `
+      CREATE (n:${this.label} {${propsString}})
+      RETURN n`;
     return session.run(CYPHER, props).then((result) => {
       session.close();
       return result;
@@ -29,7 +31,10 @@ class Node {
   }
 
   static deleteBy(session, key, value) {
-    const CYPHER = `MATCH (n:${this.label} {${key}:"${value}" }) DELETE n RETURN n`;
+    const CYPHER = `
+      MATCH (n:${this.label} {${key}:"${value}" })
+      DELETE n
+      RETURN n`;
     return session.run(CYPHER, {}).then((result) => {
       session.close();
       return result;
@@ -42,6 +47,22 @@ class Node {
       session.close();
       return result;
     });
+  }
+
+  static createRelationFromTo(session, key, a, b) {
+    const CYPHER = `
+      MATCH (a:${this.label}),(b:${this.label})
+      WHERE a.${key} = '${a}' AND b.${key} = '${b}'
+      CREATE (a)-[r:RELTYPE]->(b)
+      RETURN r`;
+    return session.run(CYPHER, {}).then((result) => {
+      session.close();
+      return result;
+    });
+  }
+
+  constructor(data) {
+    Object.key(data).forEach(key => this[key] = data[key]);
   }
 
 }

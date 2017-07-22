@@ -1,5 +1,5 @@
 import { getSession } from './dbUtils';
-import Page from '../models/Page';
+import Page from '../controllers/Page';
 
 const models = [Page];
 

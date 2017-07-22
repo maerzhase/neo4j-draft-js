@@ -1,4 +1,4 @@
-import Page from '../models/Page';
+import Page from '../controllers/Page';
 import { getSession } from '../neo4j/dbUtils';
 
 const pages = {

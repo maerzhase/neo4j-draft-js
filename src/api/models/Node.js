@@ -31,7 +31,6 @@ class Node {
       CREATE (n:${this.label} {${keysString}})
       RETURN n`;
     return runSession(session, CYPHER, props).then((result) => {
-      if (result.records.length > 0) return Node.fromResult(result);
       return result;
     });
   }
@@ -48,7 +47,6 @@ class Node {
   static getBy(session, key, value) {
     const CYPHER = `MATCH (n:${this.label} {${key}:"${value}" }) RETURN n`;
     return runSession(session, CYPHER, {}).then((result) => {
-      if (result.records.length > 0) return Node.fromResult(result);
       return result;
     });
   }
@@ -60,7 +58,6 @@ class Node {
       CREATE (n)-[r:${relation}]->(b)
       RETURN n`;
     return runSession(session, CYPHER, {}).then((result) => {
-      if (result.records.length > 0) return Node.fromResult(result);
       return result;
     });
   }

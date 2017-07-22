@@ -5,12 +5,19 @@ import { getSession } from '../neo4j/dbUtils';
 class Pages {
   static create(props) {
     const { blocks, ...pageProps } = props;
-    return Page.create(getSession(), pageProps).then((page) => {
-      return Promise.all(blocks.map(blockProps => {
-        return ContentBlock.create(getSession(), blockProps).then((block) => {
-          return ContentBlock.connectToPage(getSession(), block.uuid, page.uuid);
-        });
-      }));
+    // create the page
+    return Page.create(getSession(), pageProps).then((pageResult) => {
+      // construct a page from result
+      const page = Page.fromResult(pageResult);
+      return Promise.all(blocks.map(blockProps =>
+        // create blocks
+        ContentBlock.create(getSession(), blockProps).then((blockResult) => {
+          const block = ContentBlock.fromResult(blockResult);
+          // when block created connect to page and return block
+          ContentBlock.connectToPage(getSession(), block.uuid, page.uuid).then(() => block);
+        }),
+      // return page and block after creation
+      )).then(result => [page, ...result]);
     });
   }
 

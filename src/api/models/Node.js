@@ -2,9 +2,18 @@ import { objectToCypher } from '../../utils/Cypher';
 
 class Node {
   static initConstraints(session) {
-    if (!this.constraints) return null;
-    const all = this.constraints.map((constraint) => {
+    if (!this.unique) return null;
+    const all = this.unique.map((constraint) => {
       const CYPHER = `CREATE CONSTRAINT ON (n:${this.label}) ASSERT n.${constraint} IS UNIQUE`;
+      return session.run(CYPHER, {});
+    });
+    return Promise.all(all);
+  }
+
+  static initRequirements(session) {
+    if (!this.required) return null;
+    const all = this.required.map((constraint) => {
+      const CYPHER = `CREATE CONSTRAINT ON (n:${this.label}) ASSERT exists(n.${constraint})`;
       return session.run(CYPHER, {});
     });
     return Promise.all(all);

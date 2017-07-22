@@ -6,7 +6,11 @@ class Page extends Node {
   // define the label for the Node
   static label = 'Page';
 
-  static constraints = [
+  static unique = [
+    'uuid',
+  ];
+
+  static required = [
     'uuid',
   ];
 

@@ -10,7 +10,7 @@
     "start": "nodemon src/index.js --exec babel-node",
     "build": "babel src -d dist",
     "serve": "node dist/index.js",
-    "init": "node dist/api/neo4j/initConstraints.js"
+    "init": "babel-node src/api/neo4j/initNeo4j.js"
   },
   "author": "m3000",
   "license": "ISC",

@@ -1,6 +1,12 @@
-import { objectToCypher } from '../../utils/Cypher';
+import { objectKeysToCypher } from '../../utils/Cypher';
+import { runSession } from '../neo4j/dbUtils';
 
 class Node {
+
+  static fromResult(result) {
+    return new this(result.records[0].get('n'));
+  }
+
   static initConstraints(session) {
     if (!this.unique) return null;
     const all = this.unique.map((constraint) => {
@@ -20,12 +26,12 @@ class Node {
   }
 
   static create(session, props) {
-    const propsString = objectToCypher(props);
+    const keysString = objectKeysToCypher(props);
     const CYPHER = `
-      CREATE (n:${this.label} {${propsString}})
+      CREATE (n:${this.label} {${keysString}})
       RETURN n`;
-    return session.run(CYPHER, props).then((result) => {
-      session.close();
+    return runSession(session, CYPHER, props).then((result) => {
+      if (result.records.length > 0) return Node.fromResult(result);
       return result;
     });
   }
@@ -33,36 +39,33 @@ class Node {
   static deleteBy(session, key, value) {
     const CYPHER = `
       MATCH (n:${this.label} {${key}:"${value}" })
-      DELETE n
-      RETURN n`;
-    return session.run(CYPHER, {}).then((result) => {
-      session.close();
+      DELETE n`;
+    return runSession(session, CYPHER, {}).then((result) => {
       return result;
     });
   }
 
   static getBy(session, key, value) {
     const CYPHER = `MATCH (n:${this.label} {${key}:"${value}" }) RETURN n`;
-    return session.run(CYPHER, {}).then((result) => {
-      session.close();
+    return runSession(session, CYPHER, {}).then((result) => {
+      if (result.records.length > 0) return Node.fromResult(result);
       return result;
     });
   }
 
-  static createRelationFromTo(session, key, a, b) {
+  static createRelationFromTo(session, labelA, labelB, keyA, keyB, a, b, relation) {
     const CYPHER = `
-      MATCH (a:${this.label}),(b:${this.label})
-      WHERE a.${key} = '${a}' AND b.${key} = '${b}'
-      CREATE (a)-[r:RELTYPE]->(b)
+      MATCH (a:${labelA}),(b:${labelB})
+      WHERE a.${keyA} = '${a}' AND b.${keyB} = '${b}'
+      CREATE (a)-[r:${relation}]->(b)
       RETURN r`;
-    return session.run(CYPHER, {}).then((result) => {
-      session.close();
+    return runSession(session, CYPHER, {}).then((result) => {
       return result;
     });
   }
 
   constructor(data) {
-    Object.key(data).forEach(key => this[key] = data[key]);
+    Object.keys(data).forEach(key => this[key] = data[key]);
   }
 
 }

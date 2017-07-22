@@ -1,12 +1,11 @@
 import pages from './api/routes/pages';
 import { closeDriver } from './api/neo4j/dbUtils';
-
-const testPage = {
-  uuid: '1',
-};
+import testPage from './sample-data/draft-js-sample.js';
 
 pages.create(testPage).then((result) => {
   console.log('-->', result);
+}).catch((err) => {
+  console.log('error: ', err);
 });
 
 

@@ -14,9 +14,6 @@ class Page extends Node {
     'uuid',
   ];
 
-  static create = (session, props) => {
-    return Page.create(session, props);
-  }
   static delete = (session, uuid) => Page.deleteBy(session, 'uuid', uuid);
   static get = (session, uuid) => Page.getBy(session, 'uuid', uuid);
 

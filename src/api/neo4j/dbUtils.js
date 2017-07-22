@@ -8,3 +8,10 @@ export const getSession = () => driver.session();
 export const closeDriver = () => {
   driver.close();
 };
+
+export const runSession = (session, cypher, props) => {
+  return session.run(cypher, props).then((result) => {
+    session.close();
+    return result;
+  });
+};

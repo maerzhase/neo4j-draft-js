@@ -1,10 +1,10 @@
-import Page from '../controllers/Page';
+import Pages from '../controllers/Pages';
 import { getSession } from '../neo4j/dbUtils';
 
 const pages = {
-  create: page => Page.create(getSession(), page),
-  delete: uuid => Page.delete(getSession(), uuid),
-  get: uuid => Page.get(getSession(), uuid),
+  create: page => Pages.create(page),
+  delete: uuid => Pages.delete(uuid),
+  get: uuid => Pages.get(uuid),
 };
 
 export default pages;

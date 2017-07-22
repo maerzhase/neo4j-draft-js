@@ -1,7 +1,8 @@
 import { getSession } from './dbUtils';
-import Page from '../controllers/Page';
+import Page from '../models/Page';
+import ContentBlock from '../models/ContentBlock';
 
-const models = [Page];
+const models = [Page, ContentBlock];
 
 const constraints = models.map((model) => {
   return model.initConstraints(getSession());

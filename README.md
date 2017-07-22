@@ -1,6 +1,6 @@
 # neo4j-draft-js 
 
-## Install
+#### Install
 
 - downlaod neo4j from their official website
 - startup a new neo4j instance
@@ -12,16 +12,16 @@
   NEO4J_PASSWORD=
   ```
 
-# Usage
+## Usage
 
-## Initialize Database Constraints
+#### Initialize Database Constraints
 `npm run init` will call `initConstraints()` functions of the models.
 
-## Development
+#### Development
 
 `npm start` will start the server in dev mode with `nodemon` watching changes
 
-## Build
+#### Build
 
 `npm run build` will compile the app with babel
 

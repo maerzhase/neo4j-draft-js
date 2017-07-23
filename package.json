@@ -36,7 +36,8 @@
   "dependencies": {
     "cypher-query": "0.0.12",
     "dotenv": "^4.0.0",
-    "neo4j-driver": "^1.2.0"
+    "neo4j-driver": "^1.2.0",
+    "uuid": "^3.1.0"
   },
   "babel": {
     "presets": [

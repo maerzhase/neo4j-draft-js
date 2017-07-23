@@ -15,3 +15,11 @@ export const runSession = (session, cypher, props) => {
     return result;
   });
 };
+
+export const deleteAll = () => {
+  const session = driver.session();
+  return session.run('MATCH p=()-->() DELETE p', {}).then((result) => {
+    session.close();
+    return result;
+  });
+};
